@@ -11,6 +11,8 @@ const createSale = async (arrSales, arrAllProducts) => {
         arrQuery.push(idFromSale, productId, quantity);
     });
 
+    if (arrAllProducts.some((p, indx) => (p.quantity - arrSales[indx].quantity) < 1)) return false;
+
     await Promise.all(arrAllProducts.map((p, index) => connection
     .execute('UPDATE products SET quantity = ? WHERE id = ? ',
      [p.quantity - arrSales[index].quantity, p.id])));
@@ -60,7 +62,7 @@ const deleteSale = async (id, sales) => {
            return res;
         }),
     );
-
+    
     await Promise.all(
         allProducts.map((p, index) => connection
         .execute('UPDATE products SET quantity = ? WHERE id = ? ',

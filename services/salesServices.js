@@ -17,6 +17,8 @@ const createSale = async (arrSales) => {
 
     const id = await salesModels.createSale(arrSales, arrAllProducts);
 
+    if (!id) return { response: { message: 'Such amount is not permitted to sell' }, code: 422 };
+
     return { response: { id, itemsSold: arrSales }, code: 201 };
 };
 
@@ -41,11 +43,11 @@ const edit = async (arrProducts, id) => {
 
     if (error) return { response: { message: error.message }, code: error.code };
 
-    const idValidation = await Promise.all(
+    const productsWithId = await Promise.all(
         arrProducts.map(({ product_id: productId }) => productsModels.getById(productId)),
     );
 
-    if (idValidation.length !== arrProducts.length) {
+    if (productsWithId.length !== arrProducts.length) {
         return { response: { message: '"product_id" is required' },
          code: 400 };
     }

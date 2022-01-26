@@ -784,7 +784,7 @@ describe('Sales', () => {
     });
   });
 
-  describe.only('11 - Atualize a quantidade de produtos', () => {
+  describe('11 - Atualize a quantidade de produtos', () => {
     it('Será validado que é possível atualizar a quantidade do produto ao fazer uma compra', async () => {
       let result;
       let responseProductId;
