@@ -10,7 +10,7 @@ const createSale = async (arrSales) => {
    const idValidation = await Promise.all(
         arrSales.map(({ product_id: productId }) => productsModels.getById(productId)),
     );
-    
+
     if (idValidation.length !== arrSales.length) {
         return { response: { message: '"product_id" is required' }, code: 400 };
     }
@@ -20,6 +20,24 @@ const createSale = async (arrSales) => {
     return { response: { id, itemsSold: arrSales }, code: 201 };
 };
 
+const getAll = async () => {
+    const allSales = await salesModels.getAll();
+
+    return { response: allSales, code: 200 };
+};
+
+const getById = async (id) => {
+    const sale = await salesModels.getById(id);
+
+    if (sale.length === 0) {
+        return { response: { message: 'Sale not found' }, code: 404 };
+    }
+
+    return { response: sale, code: 200 };
+};
+
 module.exports = {
     createSale,
+    getAll,
+    getById,
 };

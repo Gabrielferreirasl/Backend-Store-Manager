@@ -23,6 +23,8 @@ app.listen(process.env.PORT, () => {
 app.post('/products', productsControllers.createProduct);
 app.get('/products', productsControllers.getAll);
 app.post('/sales', salesControllers.createSale);
+app.get('/sales', salesControllers.getAll);
 app.get('/products/:id', productsControllers.getById);
+app.get('/sales/:id', salesControllers.getById);
 app.put('/products/:id', productsControllers.update);
 app.delete('/products/:id', productsControllers.deleteProduct);
