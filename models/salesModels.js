@@ -1,6 +1,6 @@
 const connection = require('./connection');
 
-const createSale = async (arrSales) => {
+const createSale = async (arrSales, arrAllProducts) => {
     const [{ insertId: idFromSale }] = await connection.execute('INSERT INTO sales VALUES ()');
 
     let query = 'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES ';
@@ -10,6 +10,10 @@ const createSale = async (arrSales) => {
         query += index === arrSales.length - 1 ? '(?, ?, ?);' : '(?, ?, ?), ';
         arrQuery.push(idFromSale, productId, quantity);
     });
+
+    await Promise.all(arrAllProducts.map((p, index) => connection
+    .execute('UPDATE products SET quantity = ? WHERE id = ? ',
+     [p.quantity - arrSales[index].quantity, p.id])));
 
     await connection.execute(query, arrQuery);
         
@@ -48,7 +52,21 @@ const edit = async (arrProducts, id) => {
         );
 };
 
-const deleteSale = async (id) => {
+const deleteSale = async (id, sales) => {
+    const allProducts = await Promise.all(
+        sales.map(async (s) => {
+           const [[res]] = await connection
+           .execute('SELECT * FROM products WHERE id = ?', [s.product_id]);
+           return res;
+        }),
+    );
+
+    await Promise.all(
+        allProducts.map((p, index) => connection
+        .execute('UPDATE products SET quantity = ? WHERE id = ? ',
+         [sales[index].quantity + p.quantity, p.id])),
+    );
+
     await connection.execute(
         `DELETE FROM sales
         WHERE id = ?`,

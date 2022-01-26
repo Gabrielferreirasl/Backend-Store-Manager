@@ -7,15 +7,15 @@ const createSale = async (arrSales) => {
 
     if (error) return { response: { message: error.message }, code: error.code };
     
-   const idValidation = await Promise.all(
+   const arrAllProducts = await Promise.all(
         arrSales.map(({ product_id: productId }) => productsModels.getById(productId)),
     );
 
-    if (idValidation.length !== arrSales.length) {
+    if (arrAllProducts.length !== arrSales.length) {
         return { response: { message: '"product_id" is required' }, code: 400 };
     }
 
-    const id = await salesModels.createSale(arrSales);
+    const id = await salesModels.createSale(arrSales, arrAllProducts);
 
     return { response: { id, itemsSold: arrSales }, code: 201 };
 };
@@ -56,15 +56,15 @@ const edit = async (arrProducts, id) => {
 };
 
 const deleteSale = async (id) => {
-    const sale = await salesModels.getById(id);
+    const sales = await salesModels.getById(id);
 
-    if (sale.length === 0) {
+    if (sales.length === 0) {
         return { response: { message: 'Sale not found' }, code: 404 };
     }
 
-    await salesModels.deleteSale(id);
+    await salesModels.deleteSale(id, sales);
 
-    return { response: sale, code: 200 };
+    return { response: sales, code: 200 };
 };
 
 module.exports = {
