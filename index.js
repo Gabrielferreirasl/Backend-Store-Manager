@@ -7,6 +7,7 @@ app.use(bodyParser.json());
 
 // const productsMiddlewares = require('./middlewares/productsMiddlewares');
 const productsControllers = require('./controllers/productsControllers');
+const salesControllers = require('./controllers/salesControllers');
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -21,6 +22,7 @@ app.listen(process.env.PORT, () => {
 
 app.post('/products', productsControllers.createProduct);
 app.get('/products', productsControllers.getAll);
+app.post('/sales', salesControllers.createSale);
 app.get('/products/:id', productsControllers.getById);
 app.put('/products/:id', productsControllers.update);
 app.delete('/products/:id', productsControllers.deleteProduct);

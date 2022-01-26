@@ -1,0 +1,25 @@
+const salesModels = require('../models/salesModels');
+const productsModels = require('../models/productsModels');
+const schema = require('../schemas/salesSchemas');
+
+const createSale = async (arrSales) => {
+    const error = schema.validateSale(arrSales);
+
+    if (error) return { response: { message: error.message }, code: error.code };
+    
+   const idValidation = await Promise.all(
+        arrSales.map(({ product_id: productId }) => productsModels.getById(productId)),
+    );
+    
+    if (idValidation.length !== arrSales.length) {
+        return { response: { message: '"product_id" is required' }, code: 400 };
+    }
+
+    const id = await salesModels.createSale(arrSales);
+
+    return { response: { id, itemsSold: arrSales }, code: 201 };
+};
+
+module.exports = {
+    createSale,
+};

@@ -1,9 +1,9 @@
 const productsModels = require('../models/productsModels');
-const schema = require('../schemas/products');
+const schema = require('../schemas/productsSchemas');
 
 const createProduct = async ({ name, quantity }) => {
     const products = await productsModels.getAllProducts();
-    const error = schema.validate(name, quantity);
+    const error = schema.validateProduct(name, quantity);
 
     if (error) return { response: { message: error.message }, code: error.code };
 
@@ -30,7 +30,7 @@ const getById = async (id) => {
 };
 
 const update = async ({ name, quantity }, id) => {
-    const error = schema.validate(name, quantity);
+    const error = schema.validateProduct(name, quantity);
     
     if (error) return { response: { message: error.message }, code: error.code };
 
