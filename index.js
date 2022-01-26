@@ -22,3 +22,4 @@ app.listen(process.env.PORT, () => {
 app.post('/products', productsControllers.createProduct);
 app.get('/products', productsControllers.getAll);
 app.get('/products/:id', productsControllers.getById);
+app.put('/products/:id', productsControllers.update);

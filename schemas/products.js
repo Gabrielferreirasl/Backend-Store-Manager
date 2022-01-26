@@ -6,10 +6,9 @@ const errorsCode = {
     'number.min': 422,
     'number.base': 422,
      notFound: 404,
-     alreadyExists: 409,
   };
   
-  const validate = (name, quantity, products) => {
+  const validate = (name, quantity) => {
       const { error } = Joi.object({
           name: Joi.string().min(5).not().empty()
           .required(),
@@ -26,10 +25,6 @@ const errorsCode = {
           return { message: error.details[0].message,
               code: errorsCode[error.details[0].type] };
       }
-
-      if (products && products.some((p) => p.name === name)) {
-        return { message: 'Product already exists', code: errorsCode.alreadyExists };
-    }
   };
 
   module.exports = {
