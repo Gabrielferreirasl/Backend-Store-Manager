@@ -4,7 +4,7 @@ const createProduct = async (req, res) => {
     const { name, quantity } = req.body;
 
     const { response, code } = await productsServices.createProduct({ name, quantity });
-
+    
     res.status(code).json(response);
 };
 
