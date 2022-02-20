@@ -1,45 +1,28 @@
-const Joi = require('joi');
+const validateEdit = (sales, productsToEdit, oldProducts) => {
+    const newProducts = oldProducts;
+    
+    if (newProducts.length !== productsToEdit.length) {
+        return { message: '"product_id" is required' };
+    } 
+    
+    sales.map((s, index) => {
+        if (s.quantity < productsToEdit[index].quantity) {
+            newProducts[index].quantity -= productsToEdit[index].quantity;
+           return s;
+        }
+        newProducts[index].quantity += productsToEdit[index].quantity;
+        return s;
+    });
 
-const errorsCode = {
-    'any.required': 400,
-    'number.min': 422,
-    'number.base': 422,
-     notFound: 404,
-  };
+    const isProductAvailable = newProducts.find((product) => product.quantity < 0);
 
-  const PRODUCT_ID_MESSAGES = {
-    'any.required': '"product_id" is required',
-    'number.min': '"product_id" is required',
-    'number.base': '"product_id" is required',
-  };
+    if (isProductAvailable) {
+        return { message: `Such amount of: ${isProductAvailable.name}, is not available` };
+    }
 
-  const QUANTITY_MESSAGES = {
-    'any.required': '"quantity" is required',
-    'number.min': '"quantity" must be a number larger than or equal to 1',
-    'number.base': '"quantity" must be a number larger than or equal to 1',
-    };
+    return newProducts;
+};
 
-  const formatKey = (array) => array
-   .reduce((arr, { product_id: productId, quantity }) => arr.concat({ productId, quantity }), []);
-  
-  const validateSale = (arrSales) => {
-      const { error } = Joi.array().items(
-          Joi.object({
-            productId: Joi.number().min(1).not().empty()
-          .required()
-          .messages(PRODUCT_ID_MESSAGES),
-          quantity: Joi.number().min(1).not().empty()
-          .required()
-          .messages(QUANTITY_MESSAGES),
-      }),
-      ).validate(formatKey(arrSales));
-
-      if (error) {
-          return { message: error.details[0].message,
-              code: errorsCode[error.details[0].type] };
-      }
-  };
-
-  module.exports = {
-    validateSale,
-  };
+module.exports = {
+    validateEdit,
+};

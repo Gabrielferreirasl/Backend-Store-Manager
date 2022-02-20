@@ -1,11 +1,7 @@
 const productsModels = require('../models/productsModels');
-const schema = require('../schemas/productsSchemas');
 
 const createProduct = async ({ name, quantity }) => {
     const products = await productsModels.getAllProducts();
-    const error = schema.validateProduct(name, quantity);
-
-    if (error) return { response: { message: error.message }, code: error.code };
 
     if (products.some((p) => p.name === name)) {
         return { response: { message: 'Product already exists' }, code: 409 };
@@ -30,11 +26,8 @@ const getById = async (id) => {
 };
 
 const update = async ({ name, quantity }, id) => {
-    const error = schema.validateProduct(name, quantity);
-    
-    if (error) return { response: { message: error.message }, code: error.code };
-
     const product = await productsModels.getById(id);
+
     if (!product) return { response: { message: 'Product not found' }, code: 404 };
 
      await productsModels.update({ name, quantity }, id);
