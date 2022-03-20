@@ -12,7 +12,7 @@ const createSale = async (arrSales) => {
     }
    
     if (arrAllProducts.some((p, indx) => (p.quantity - arrSales[indx].quantity) < 1)) {
-        return { response: { message: 'Such amount is not permitted to sell' }, code: 422 };
+        return { response: { message: 'Such amount is not available' }, code: 422 };
     }
 
     const id = await salesModels.createSale(arrSales, arrAllProducts);
