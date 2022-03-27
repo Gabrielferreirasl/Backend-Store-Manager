@@ -1,6 +1,6 @@
 ## Description
 
-The API is a sales management system, where it will be possible to create,
+The API uses Express and is a sales management system, where it will be possible to create,
 view, delete and update products and sales,the MSC architecture was used,
 the MySQL database for data management, and the API is RESTful.
 Unit tests were also done.
