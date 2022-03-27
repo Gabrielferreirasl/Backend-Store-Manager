@@ -5,7 +5,7 @@ view, delete and update products and sales,the MSC architecture was used,
 the MySQL database for data management, and the API is RESTful.
 Unit tests were also done.
 
-## When Downloading the project:
+## After downloading the project:
 
 create an .env file to connect to your local database:
 ```
