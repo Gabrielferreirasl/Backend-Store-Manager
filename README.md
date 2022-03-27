@@ -13,6 +13,7 @@ MYSQL_USER=yourUser
 MYSQL_PASSWORD=yourPass
 MYSQL_HOST=yourHost
 JWT_SECRET=yourSecretPass
+PORT=3000
 ```
 Then:
 
