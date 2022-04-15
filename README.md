@@ -7,7 +7,7 @@ Unit tests were also done.
 
 ## After downloading the project:
 
-create an .env file to connect to your local database:
+create an .env file to connect to your local MySQL database:
 ```
 MYSQL_USER=yourUser
 MYSQL_PASSWORD=yourPass
